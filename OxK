@@ -1,0 +1,301 @@
+local function secureEnvironment()
+if getrawmetatable and getgc then
+local old_index = getrawmetatable(game).__index
+if old_index ~= game.__index then
+game:GetService("Players").LocalPlayer:Kick("Security Violation: Memory Hook Detected.")
+return false
+end
+end
+return true
+end
+if not secureEnvironment() then return end
+local MASTER_KEY = "77533933904801"
+local EXPIRY_TIMESTAMP = 1806537600
+local function getCurrentTime()
+local success, result = pcall(function()
+local response = game:HttpGet("worldtimeapi.org")
+local data = game:GetService("HttpService"):JSONDecode(response)
+return data.unixtime
+end)
+if success and result then
+return result
+else
+return os.time()
+end
+end
+local ScreenGui = Instance.new("ScreenGui")
+local MainFrame = Instance.new("Frame")
+local Title = Instance.new("TextLabel")
+local KeyInput = Instance.new("TextBox")
+local SubmitBtn = Instance.new("TextButton")
+local StatusLabel = Instance.new("TextLabel")
+ScreenGui.Name = game:GetService("HttpService"):GenerateGUID(false)
+ScreenGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+MainFrame.Name = "MainFrame"
+MainFrame.Parent = ScreenGui
+MainFrame.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+MainFrame.Position = UDim2.new(0.5, -150, 0.5, -85)
+MainFrame.Size = UDim2.new(0, 300, 0, 170)
+MainFrame.BorderSizePixel = 0
+Title.Name = "Title"
+Title.Parent = MainFrame
+Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+Title.Size = UDim2.new(1, 0, 0, 30)
+Title.Font = Enum.Font.SourceSansBold
+Title.Text = "TITAN CORE PREMIUM - KEY SYSTEM"
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 14.000
+KeyInput.Name = "KeyInput"
+KeyInput.Parent = MainFrame
+KeyInput.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
+KeyInput.Position = UDim2.new(0.05, 0, 0.30, 0)
+KeyInput.Size = UDim2.new(0.9, 0, 0, 30)
+KeyInput.Font = Enum.Font.SourceSans
+KeyInput.PlaceholderText = "Masukkan Premium Key Di Sini..."
+KeyInput.Text = ""
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.TextSize = 14.000
+SubmitBtn.Name = "SubmitBtn"
+SubmitBtn.Parent = MainFrame
+SubmitBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 70)
+SubmitBtn.Position = UDim2.new(0.05, 0, 0.58, 0)
+SubmitBtn.Size = UDim2.new(0.9, 0, 0, 30)
+SubmitBtn.Font = Enum.Font.SourceSansBold
+SubmitBtn.Text = "VERIFIKASI LISENSI"
+SubmitBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitBtn.TextSize = 14.000
+StatusLabel.Name = "StatusLabel"
+StatusLabel.Parent = MainFrame
+StatusLabel.BackgroundTransparency = 1.000
+StatusLabel.Position = UDim2.new(0.05, 0, 0.82, 0)
+StatusLabel.Size = UDim2.new(0.9, 0, 0, 20)
+StatusLabel.Font = Enum.Font.SourceSansItalic
+StatusLabel.Text = "Status: Menunggu Key..."
+StatusLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+StatusLabel.TextSize = 12.000
+local function startTitanCore()
+StatusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
+StatusLabel.Text = "Akses Diterima! Memuat fitur..."
+task.wait(1)
+ScreenGui:Destroy()
+local TitanSettings = {
+AutoParry = true,
+ClashDistance = 18.5,
+AbsoluteThreshold = 15.2,
+TickRateCompensation = 1.115,
+JitterMin = 0.0008,
+JitterMax = 0.0032,
+RefractoryPeriod = 0.024,
+ParryKey = Enum.KeyCode.F
+}
+local WeaponWindUpProfiles = {
+Default = 0.000, Dagger = -0.016, Greatsword = 0.032, Scythe = 0.012
+}
+local EngineState = {
+ActiveBall = nil, LockState = false, LastVelocity = Vector3.zero, Acceleration = Vector3.zero, LastTick = os.clock()
+}
+local CombatGui = Instance.new("ScreenGui")
+local CombatFrame = Instance.new("Frame")
+local FrameCorner = Instance.new("UICorner")
+local TitleLabel = Instance.new("TextLabel")
+local ToggleBtn = Instance.new("TextButton")
+local ToggleCorner = Instance.new("UICorner")
+local SliderFrame = Instance.new("Frame")
+local SliderBtn = Instance.new("TextButton")
+local SliderLabel = Instance.new("TextLabel")
+local ValueLabel = Instance.new("TextLabel")
+CombatGui.Name = game:GetService("HttpService"):GenerateGUID(false)
+CombatGui.Parent = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
+CombatFrame.Name = "CombatFrame"
+CombatFrame.Parent = CombatGui
+CombatFrame.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+CombatFrame.Position = UDim2.new(0.5, -125, 0.5, -75)
+CombatFrame.Size = UDim2.new(0, 250, 0, 150)
+CombatFrame.Active = true
+CombatFrame.Draggable = true
+FrameCorner.CornerRadius = UDim.new(0, 8)
+FrameCorner.Parent = CombatFrame
+TitleLabel.Name = "TitleLabel"
+TitleLabel.Parent = CombatFrame
+TitleLabel.Size = UDim2.new(1, 0, 0, 30)
+TitleLabel.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+TitleLabel.Font = Enum.Font.SourceSansBold
+TitleLabel.Text = "TITAN CORE PREMIUM v7.50"
+TitleLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+TitleLabel.TextSize = 14.000
+ToggleBtn.Name = "ToggleBtn"
+ToggleBtn.Parent = CombatFrame
+ToggleBtn.Position = UDim2.new(0.1, 0, 0.3, 0)
+ToggleBtn.Size = UDim2.new(0.8, 0, 0, 30)
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 70)
+ToggleBtn.Font = Enum.Font.SourceSansBold
+ToggleBtn.Text = "AUTO PARRY: ON"
+ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+ToggleBtn.TextSize = 14.000
+ToggleCorner.CornerRadius = UDim.new(0, 4)
+ToggleCorner.Parent = ToggleBtn
+SliderFrame.Name = "SliderFrame"
+SliderFrame.Parent = CombatFrame
+SliderFrame.Position = UDim2.new(0.1, 0, 0.65, 0)
+SliderFrame.Size = UDim2.new(0.8, 0, 0, 20)
+SliderFrame.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+SliderBtn.Name = "SliderBtn"
+SliderBtn.Parent = SliderFrame
+SliderBtn.Size = UDim2.new(0.5, 0, 1, 0)
+SliderBtn.BackgroundColor3 = Color3.fromRGB(0, 255, 150)
+SliderBtn.Text = ""
+SliderLabel.Name = "SliderLabel"
+SliderLabel.Parent = CombatFrame
+SliderLabel.Position = UDim2.new(0.1, 0, 0.53, 0)
+SliderLabel.Size = UDim2.new(0.5, 0, 0, 15)
+SliderLabel.Text = "Jarak Parry:"
+SliderLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
+SliderLabel.TextSize = 12.000
+SliderLabel.TextXAlignment = Enum.TextXAlignment.Left
+ValueLabel.Name = "ValueLabel"
+ValueLabel.Parent = CombatFrame
+ValueLabel.Position = UDim2.new(0.5, 0, 0.53, 0)
+ValueLabel.Size = UDim2.new(0.4, 0, 0, 15)
+ValueLabel.Text = "18.5 Studs"
+ValueLabel.TextColor3 = Color3.fromRGB(0, 255, 150)
+ValueLabel.TextSize = 12.000
+ValueLabel.TextXAlignment = Enum.TextXAlignment.Right
+ToggleBtn.MouseButton1Click:Connect(function()
+TitanSettings.AutoParry = not TitanSettings.AutoParry
+if TitanSettings.AutoParry then
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(0, 150, 70)
+ToggleBtn.Text = "AUTO PARRY: ON"
+else
+ToggleBtn.BackgroundColor3 = Color3.fromRGB(150, 0, 0)
+ToggleBtn.Text = "AUTO PARRY: OFF"
+end
+end)
+local UserInputService = game:GetService("UserInputService")
+local dragging = false
+SliderBtn.InputBegan:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 then dragging = true end
+end)
+UserInputService.InputChanged:Connect(function(input)
+if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+local mousePos = UserInputService:GetMouseLocation().X
+local framePos = SliderFrame.AbsolutePosition.X
+local frameWidth = SliderFrame.AbsoluteSize.X
+local percentage = math.clamp((mousePos - framePos) / frameWidth, 0, 1)
+SliderBtn.Size = UDim2.new(percentage, 0, 1, 0)
+local calculatedDistance = math.round(10 + (percentage * 30))
+TitanSettings.ClashDistance = calculatedDistance
+ValueLabel.Text = tostring(calculatedDistance) .. " Studs"
+end
+end)
+UserInputService.InputChanged:Connect(function(input)
+if dragging and input.UserInputType == Enum.UserInputType.Touch then
+local touchPos = input.Position.X
+local framePos = SliderFrame.AbsolutePosition.X
+local frameWidth = SliderFrame.AbsoluteSize.X
+local percentage = math.clamp((touchPos - framePos) / frameWidth, 0, 1)
+SliderBtn.Size = UDim2.new(percentage, 0, 1, 0)
+local calculatedDistance = math.round(10 + (percentage * 30))
+TitanSettings.ClashDistance = calculatedDistance
+ValueLabel.Text = tostring(calculatedDistance) .. " Studs"
+end
+end)
+UserInputService.InputEnded:Connect(function(input)
+if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then dragging = false end
+end)
+local function RegisterBallDiagnostics(folder)
+local function EvaluateEntity(child)
+if child:IsA("BasePart") or child.Name:find("Ball") or child:GetAttribute("Target") or child.Name:lower():find("ball") then
+EngineState.ActiveBall = child
+end
+end
+folder.ChildAdded:Connect(EvaluateEntity)
+for _, child in ipairs(folder:GetChildren()) do EvaluateEntity(child) end
+end
+task.spawn(function()
+local ballsContainer = workspace:FindFirstChild("Balls")
+if ballsContainer then RegisterBallDiagnostics(ballsContainer)
+else
+workspace.ChildAdded:Connect(function(child)
+if child.Name == "Balls" then RegisterBallDiagnostics(child) end
+end)
+end
+end)
+local function EvaluateCharacterAsset()
+local character = game:GetService("Players").LocalPlayer.Character
+if not character then return 0 end
+for assetName, latencyOffset in pairs(WeaponWindUpProfiles) do
+if character:FindFirstChild(assetName) then return latencyOffset end
+end
+return 0
+end
+local function TriggerHardwareParry()
+EngineState.LockState = true
+task.spawn(function()
+local desyncInterval = math.random() * (TitanSettings.JitterMax - TitanSettings.JitterMin) + TitanSettings.JitterMin
+task.wait(desyncInterval)
+VirtualInputManager:SendKeyEvent(true, TitanSettings.ParryKey, false, game)
+task.wait(0.005)
+VirtualInputManager:SendKeyEvent(false, TitanSettings.ParryKey, false, game)
+task.wait(TitanSettings.RefractoryPeriod)
+EngineState.LockState = false
+end)
+end
+game:GetService("RunService").PostSimulation:Connect(function(deltaTime)
+if not TitanSettings.AutoParry or EngineState.LockState or not EngineState.ActiveBall or not EngineState.ActiveBall.Parent then return end
+local character = game:GetService("Players").LocalPlayer.Character
+local rootPart = character and character:FindFirstChild("HumanoidRootPart")
+if not rootPart then return end
+local ball = EngineState.ActiveBall
+local networkTarget = ball:GetAttribute("target") or ball:GetAttribute("Target")
+if networkTarget ~= game:GetService("Players").LocalPlayer.Name and networkTarget ~= game:GetService("Players").LocalPlayer.DisplayName then return end
+local playerPosition = rootPart.Position
+local ballPosition = ball.Position
+local ballVelocity = ball.AssemblyLinearVelocity
+local currentBallSpeed = ballVelocity.Magnitude
+if currentBallSpeed <= 0.1 then return end
+local currentClock = os.clock()
+local timeDelta = currentClock - EngineState.LastTick
+if timeDelta > 0 then
+EngineState.Acceleration = (ballVelocity - EngineState.LastVelocity) / timeDelta
+end
+EngineState.LastVelocity = ballVelocity
+EngineState.LastTick = currentClock
+local targetVector = (playerPosition - ballPosition).Unit
+local velocityVector = ballVelocity.Unit
+local threatCoefficient = velocityVector:Dot(targetVector)
+local exactDistance = (playerPosition - ballPosition).Magnitude
+if threatCoefficient < 0.02 and exactDistance > TitanSettings.AbsoluteThreshold then return end
+local dynamicSpeedModifier = 1.00
+if currentBallSpeed > 170 then dynamicSpeedModifier = 1.34
+elseif currentBallSpeed > 110 then dynamicSpeedModifier = 1.18
+elseif currentBallSpeed > 60 then dynamicSpeedModifier = 1.05 end
+local networkLatency = game:GetService("Stats").Network.ServerPing:GetValue() / 1000
+local activeAssetOffset = EvaluateCharacterAsset()
+local predictedSpeed = currentBallSpeed + (EngineState.Acceleration.Magnitude * deltaTime)
+local estimatedTimeToImpact = exactDistance / (predictedSpeed > 0 and predictedSpeed or currentBallSpeed)
+local computeActivationWindow = networkLatency + activeAssetOffset + deltaTime + ((exactDistance / 920) * TitanSettings.TickRateCompensation * dynamicSpeedModifier)
+if exactDistance <= TitanSettings.ClashDistance and currentBallSpeed > 45 then
+TriggerHardwareParry()
+elseif estimatedTimeToImpact <= computeActivationWindow or exactDistance <= TitanSettings.AbsoluteThreshold then
+TriggerHardwareParry()
+end
+end)
+end
+SubmitBtn.MouseButton1Click:Connect(function()
+local enteredKey = KeyInput.Text
+local currentTime = getCurrentTime()
+if currentTime > EXPIRY_TIMESTAMP then
+StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+StatusLabel.Text = "Lisensi skrip ini telah Kedaluwarsa!"
+task.wait(2)
+game:GetService("Players").LocalPlayer:Kick("[Titan Core] Lisensi 5 Bulan Anda Telah Habis.")
+return
+end
+if enteredKey == MASTER_KEY then
+startTitanCore()
+else
+StatusLabel.TextColor3 = Color3.fromRGB(255, 0, 0)
+StatusLabel.Text = "Key Salah atau Tidak Valid!"
+KeyInput.Text = ""
+end
+end)
